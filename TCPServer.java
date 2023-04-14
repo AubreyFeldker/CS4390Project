@@ -1,6 +1,13 @@
 import java.io.*; 
 import java.net.*; 
 
+class ClientInfo {
+  public int      id;
+  public boolean  isActive;
+  public int   timeStarted;
+  public int   timeAttached;
+}
+
 class TCPServer { 
 
   public static void main(String argv[]) throws Exception 
