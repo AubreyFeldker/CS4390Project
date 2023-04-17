@@ -1,35 +1,43 @@
-import java.io.*; 
-import java.net.*; 
-class TCPClient { 
+import java.io.*;
+import java.net.*;
 
-    public static void main(String argv[]) throws Exception 
-    { 
-        String sentence; 
-        String modifiedSentence; 
+class TCPClient {
 
-        BufferedReader inFromUser = 
-          new BufferedReader(new InputStreamReader(System.in)); 
+    public static void main(String argv[]) throws Exception
+    {
+        String sentence;
+        String modifiedSentence;
 
-        Socket clientSocket = new Socket("127.0.0.1", 6789); 
+        BufferedReader inFromUser =
+                new BufferedReader(new InputStreamReader(System.in));
 
-        DataOutputStream outToServer = 
-          new DataOutputStream(clientSocket.getOutputStream()); 
-        
-        BufferedReader inFromServer = 
-                new BufferedReader(new
-                InputStreamReader(clientSocket.getInputStream())); 
+        Socket clientSocket = new Socket("127.0.0.1", 6789);
 
-              sentence = inFromUser.readLine(); 
+        //SEND INITIAL MESSAGE
 
-              outToServer.writeBytes(sentence + '\n'); 
+        //Loop three times
+        int x = 0;
+        while(x < 3){
+            DataOutputStream outToServer =
+                    new DataOutputStream(clientSocket.getOutputStream());
 
-              modifiedSentence = inFromServer.readLine(); 
+            BufferedReader inFromServer =
+                    new BufferedReader(new
+                            InputStreamReader(clientSocket.getInputStream()));
 
-              System.out.println("FROM SERVER: " + modifiedSentence); 
 
-              clientSocket.close(); 
-                         
-          } 
-      } 
+            sentence = inFromUser.readLine();
 
-        
+            outToServer.writeBytes(sentence + '\n');
+
+            modifiedSentence = inFromServer.readLine();
+
+            System.out.println("FROM SERVER: " + modifiedSentence);
+            x++;
+        }
+
+        clientSocket.close();
+
+
+    }
+}

@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="10c9a8a3-6a9f-42a3-822e-7c073084b375" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/ServerThread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TCPClient2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TCPClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/TCPClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TCPServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/TCPServer.java" afterDir="false" />
     </list>
@@ -33,12 +33,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
