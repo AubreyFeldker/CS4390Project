@@ -5,38 +5,51 @@ class TCPClient {
 
     public static void main(String argv[]) throws Exception
     {
-        String sentence;
-        String modifiedSentence;
+        String equation;
+        String answer;
+        int id;
 
         BufferedReader inFromUser =
                 new BufferedReader(new InputStreamReader(System.in));
 
         Socket clientSocket = new Socket("127.0.0.1", 6789);
 
-        //Loop three times
-        int x = 0;
-        while(x < 3){
-            DataOutputStream outToServer =
-                    new DataOutputStream(clientSocket.getOutputStream());
+        DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+        BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            BufferedReader inFromServer =
-                    new BufferedReader(new
-                            InputStreamReader(clientSocket.getInputStream()));
+        //Initial connection message with server
+        outToServer.writeBytes("CONNECT" + '\n');
+        answer = inFromServer.readLine();
 
+        id = Integer.parseInt(answer.split(" ")[1]);
 
-            sentence = inFromUser.readLine();
+        while(true) {
+            outToServer = new DataOutputStream(clientSocket.getOutputStream());
+            inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            outToServer.writeBytes(sentence + '\n');
+            equation = inFromUser.readLine();
 
-            modifiedSentence = inFromServer.readLine();
+            // Signifies time to disconnect
+            if (equation.compareTo("exit") == 0) {
+                
+                while (true) { // Make sure the connection is closed on the server side
+                    outToServer.writeBytes("DISCONNECT " + id + '\n');
 
-            System.out.println("FROM SERVER: " + modifiedSentence);
-            x++;
+                    answer = inFromServer.readLine();
+                    if(answer.compareTo("DISCONNECT " + id) == 0)
+                        break; 
+                }
+                break;
+            }
+
+            outToServer.writeBytes("MATH " + id + " " + equation + '\n');
+            answer = inFromServer.readLine();
+
+            System.out.println("ANSWER FROM SERVER: " + answer);
         }
-
+        
+        System.out.println("CONNECTION WITH SERVER TERMINATED. GOODBYE.");
         clientSocket.close();
-
-
     }
 }
         
