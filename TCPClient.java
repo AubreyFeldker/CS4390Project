@@ -45,7 +45,8 @@ class TCPClient {
             outToServer.writeBytes("MATH " + id + " " + equation + '\n');
             answer = inFromServer.readLine();
 
-            System.out.println("ANSWER FROM SERVER: " + answer);
+            String[] split = answer.split(" ");
+            System.out.println("ANSWER FROM SERVER: " + split[2]);
         }
         
         System.out.println("CONNECTION WITH SERVER TERMINATED. GOODBYE.");

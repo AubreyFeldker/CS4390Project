@@ -38,6 +38,10 @@ public class ServerThread implements Runnable {
             clientList.add(client);
 
             outToClient.writeBytes("CONNECT " + id + '\n');
+            
+            //Script Engine to evaluate math equations
+            ScriptEngineManager mgr = new ScriptEngineManager();
+            ScriptEngine engine = mgr.getEngineByName("JavaScript");
 
             //Read a line from client until they stop sending in line inputs
             while((clientSentence = inFromClient.readLine()) != null) {
@@ -49,11 +53,9 @@ public class ServerThread implements Runnable {
                 String[] l = clientSentence.split(" ");
                 clientSentence = String.join(" ", Arrays.copyOfRange(l,2,l.length));
 
-                //Script Engine to evaluate math equations
-                ScriptEngineManager mgr = new ScriptEngineManager();
-                ScriptEngine engine = mgr.getEngineByName("JavaScript");
+                
                 try {
-                    System.out.println("Answer is: " + engine.eval(clientSentence));
+                    System.out.println("Answer for Client " + id + " is: " + engine.eval(clientSentence));
                     answer = (engine.eval(clientSentence)).toString();
                 } catch (ScriptException error) {
                     System.out.println("Invalid equation: " + error);
