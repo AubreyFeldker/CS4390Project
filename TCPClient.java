@@ -17,36 +17,39 @@ class TCPClient {
         DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
         BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+
+        //Used to read from and write to the server
+        outToServer = new DataOutputStream(clientSocket.getOutputStream());
+        inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
         //Initial connection message with server
-        outToServer.writeBytes("CONNECT" + '\n');
-        answer = inFromServer.readLine();
-
-        id = Integer.parseInt(answer.split(" ")[1]);
-
+        equation = inFromUser.readLine(); //write initial message
+        outToServer.writeBytes(equation + '\n'); //send initial message
+        answer = inFromServer.readLine(); //retrieve initial server response
+        System.out.println(answer + " has connected to the server");
         while(true) {
-            outToServer = new DataOutputStream(clientSocket.getOutputStream());
-            inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+            //Get line written from user
             equation = inFromUser.readLine();
 
             // Signifies time to disconnect
             if (equation.compareTo("exit") == 0) {
                 
                 while (true) { // Make sure the connection is closed on the server side
-                    outToServer.writeBytes("DISCONNECT " + id + '\n');
+                    outToServer.writeBytes("DISCONNECT" + '\n');
 
                     answer = inFromServer.readLine();
-                    if(answer.compareTo("DISCONNECT " + id) == 0)
+                    if(answer.compareTo("DISCONNECT") == 0)
                         break; 
                 }
                 break;
             }
 
-            outToServer.writeBytes("MATH " + id + " " + equation + '\n');
+            outToServer.writeBytes(equation + '\n');
             answer = inFromServer.readLine();
 
             String[] split = answer.split(" ");
-            System.out.println("ANSWER FROM SERVER: " + split[2]);
+            System.out.println("ANSWER FROM SERVER: " + split[split.length-1]);
         }
         
         System.out.println("CONNECTION WITH SERVER TERMINATED. GOODBYE.");
