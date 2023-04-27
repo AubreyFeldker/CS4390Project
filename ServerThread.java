@@ -65,9 +65,9 @@ public class ServerThread implements Runnable {
 
                 outToClient.writeBytes(clientName + " " + answer + '\n');
             }
-            System.out.println("Connection with " + clientName + " terminated.");
             client.endClient();
             outToClient.writeBytes("DISCONNECT" + '\n');
+            System.out.println("Connection with " + clientName + " terminated. Connection lasted " + client.timeAttached / 1000 + " seconds.");
 
             inFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             outToClient = new DataOutputStream(clientSocket.getOutputStream());
