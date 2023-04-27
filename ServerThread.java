@@ -24,6 +24,7 @@ public class ServerThread implements Runnable {
     @Override
     public void run(){
         String clientSentence;
+        String clientName;
         String answer;
 
         try{
@@ -32,39 +33,41 @@ public class ServerThread implements Runnable {
             DataOutputStream outToClient = new DataOutputStream(clientSocket.getOutputStream());
 
             //Creating new client in clientList from first message
-            clientSentence = inFromClient.readLine();
+            clientName = inFromClient.readLine();
             int id = clientList.size();
             client = new ClientInfo(id);
             clientList.add(client);
 
-            outToClient.writeBytes("CONNECT " + id + '\n');
+            System.out.println(clientName + " has connected to the server");
+            outToClient.writeBytes("CONNECT " + clientName + '\n');
+            
+            //Script Engine to evaluate math equations
+            ScriptEngineManager mgr = new ScriptEngineManager();
+            ScriptEngine engine = mgr.getEngineByName("JavaScript");
 
             //Read a line from client until they stop sending in line inputs
             while((clientSentence = inFromClient.readLine()) != null) {
                 //DISCONNECT MESSAGE
-                if(clientSentence.compareTo("DISCONNECT " + id) == 0)
+                if(clientSentence.compareTo("DISCONNECT") == 0)
                     break;
 
                 client.numEquations++;
-                String[] l = clientSentence.split(" ");
-                clientSentence = String.join(" ", Arrays.copyOfRange(l,2,l.length));
-
-                //Script Engine to evaluate math equations
-                ScriptEngineManager mgr = new ScriptEngineManager();
-                ScriptEngine engine = mgr.getEngineByName("JavaScript");
+//                String[] l = clientSentence.split(" ");
+//                clientSentence = String.join(" ", Arrays.copyOfRange(l,2,l.length));
+                
                 try {
-                    System.out.println("Answer is: " + engine.eval(clientSentence));
+                    System.out.println("Answer for " + clientName + " is: " + engine.eval(clientSentence));
                     answer = (engine.eval(clientSentence)).toString();
                 } catch (ScriptException error) {
                     System.out.println("Invalid equation: " + error);
                     answer = "Invalid equation";
                 }
 
-                outToClient.writeBytes("MATH " + id + " " + answer + '\n');
+                outToClient.writeBytes(clientName + " " + answer + '\n');
             }
-            System.out.println("Connection with client " + id + " teminated.");
+            System.out.println("Connection with " + clientName + " terminated.");
             client.endClient();
-            outToClient.writeBytes("DISCONNECT " + id + '\n');
+            outToClient.writeBytes("DISCONNECT" + '\n');
 
             inFromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             outToClient = new DataOutputStream(clientSocket.getOutputStream());
